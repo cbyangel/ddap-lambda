@@ -110,14 +110,30 @@
 
 
 ## environment
-anaconda python 3.7
+anaconda python 3.7을 기반으로 하며 dhub에 접속 가능해야 한다.
 
 `conda env create -n ddap-batch -f environment.yml`
+
+또한 실행에 필요한 환경변수와 db 접속정보를 `.env` 파일로 관리하는데 아래에 주어진 form에 값을 채운 파일을 생성한다.
+
+```
+# oracle 접속시 반드시 필요한 환경변수 
+NLS_LANG=KOREAN_KOREA.UTF8 
+
+# oracle 접속 정보
+ORA_HOST=1.1.1.1
+DHUB_ID=id  # 데이터 허브 DML 계정
+DHUB_PW=pw
+DTA_ID=id  # DDAP 테이블 DDL 계정
+DTA_PW=pw
+
+# 소스 코드를 실행할 working directory 명시
+PROJECT_HOME=/some/path
+```
 
 
 ## 실행
     
-    # dhub 접속 가능한 환경에서
     conda activate ddap-batch
     python -m main
 
