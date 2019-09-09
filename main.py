@@ -1,7 +1,5 @@
 import dotenv
 
-import src.write_db
-
 _env_path = dotenv.find_dotenv(raise_error_if_not_found=True)
 assert _env_path != '', 'failed to load environment variables'
 dotenv.load_dotenv(_env_path)
@@ -9,6 +7,7 @@ dotenv.load_dotenv(_env_path)
 from time import ctime
 
 import pandas as pd
+from src import write_db
 from src import read_db
 from src import dbutil
 from src import data_process
@@ -76,14 +75,14 @@ def main(broad_dt):
 
         """write df on dhub"""
 
-        src.write_db.write_auto_db(view_)
-        src.write_db.write_snapshot_db(sold_out_snapshot_)
+        write_db.write_auto_db(view_)
+        write_db.write_snapshot_db(sold_out_snapshot_)
 
         print('{}\tdhub inserted'.format(ctime()))
 
 
 if __name__ == '__main__':
-    broad_dt = 20190826
-    src.write_db.delete_by_day_auto_table(broad_dt)
-    src.write_db.delete_by_day_snapshot_table(broad_dt)
+    broad_dt = 20190907
+    write_db.delete_by_day_auto_table(broad_dt)
+    write_db.delete_by_day_snapshot_table(broad_dt)
     main(broad_dt)
