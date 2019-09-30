@@ -35,7 +35,7 @@ def get_view(conn, broad_dt, is_catv):
     else:
         chanl_cd, mnfc_gbn_cd = 'H', '5'
 
-    with open(_os.path.join(ROOT_DIR, 'sql', 'view_base.sql'), 'r') as f:
+    with open(_os.path.join(ROOT_DIR, 'sql', 'view.sql'), 'r') as f:
         sql = f.read()
 
     params = {'broad_dt': broad_dt, 'chanl_cd': chanl_cd, 'mnfc_gbn_cd': mnfc_gbn_cd}

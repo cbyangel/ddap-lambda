@@ -2,7 +2,7 @@ from crontab import CronTab
 
 cron  = CronTab(user=True)
 
-job  = cron.new(command='cd /tmp/pyproj && /opt/anaconda3/envs/ddap/bin/python batch.py', comment='ddap daily batch')
+job  = cron.new(command='cd /data2/ddap && /data2/ddap/conda/envs/ddap-batch/bin/python batch.py', comment='ddap daily batch')
 job.hour.on(12)
 job.minute.on(0)
 
