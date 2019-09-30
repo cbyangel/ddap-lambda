@@ -82,7 +82,7 @@ def main(broad_dt):
 
 
 if __name__ == '__main__':
-    broad_dt = 20190907
+    broad_dt = 20160102
     write_db.delete_by_day_auto_table(broad_dt)
     write_db.delete_by_day_snapshot_table(broad_dt)
     main(broad_dt)
