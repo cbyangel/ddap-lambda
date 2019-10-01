@@ -44,7 +44,8 @@ COL_NAME_EN_TO_KR = {'ITEM_NM': '아이템명', 'ITEM_CD': '아이템코드',
                      'CHG_RT': '전환율', 'EXPOS_MI': '노출분',
                      'WEIHT_MI': '가중분', 'EXPCT_SAL_AMT_PER_WMI': '가중분취',
                      'ATTR_PRD_WHL_VAL': '상품속성값', 'MYSHOP_FST_BROAD_DT': '데이터런칭일자',
-                     'SIZE2': '사이즈2', 'SIZE3': '사이즈3', 'MD_ID': 'MDID'
+                     'SIZE2': '사이즈2', 'SIZE3': '사이즈3', 'MD_ID': 'MDID',
+                     'FST_BROAD_DT': '라이브런칭일', 'FST_PRD_SALE_PRC': '최초판매가'
                      }
 
 VIEW_DTYPES = {'ATTR_PRD_1_VAL': 'object', 'ATTR_PRD_2_VAL': 'object',
@@ -64,7 +65,8 @@ VIEW_DTYPES = {'ATTR_PRD_1_VAL': 'object', 'ATTR_PRD_2_VAL': 'object',
                'SIZE_STR': 'object', 'SOLD_OUT_DTM': 'datetime64[ns]',
                'SOLD_OUT_FLAG': 'float64', 'SUPLY_APNT_QTY': 'float64',
                'TOT_ORD_AMT': 'float64', 'TOT_ORD_QTY': 'float64',
-               'VALUE': 'float64', 'WEIHT_MI': 'float64', 'MD_ID': 'object'
+               'VALUE': 'float64', 'WEIHT_MI': 'float64', 'MD_ID': 'object',
+               'FST_BROAD_DT': 'object', 'FST_PRD_SALE_PRC': 'float64'
                }
 
 SVD_DTYPES = {'PGM_ID': 'int', 'PRD_CD': 'int', 'CHANL_CD': 'object', 'ATTR_PRD_CD': 'int',
@@ -135,7 +137,6 @@ def add_estim_qty(view_part, svd_imputed):
 
 def prepare_columns(view):
     add_this_col = [i for i in COLUMNS if i not in view.columns.tolist()]
-
     return _pd.concat([view, _pd.DataFrame(columns=add_this_col)], sort=False)
 
 

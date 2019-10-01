@@ -23,7 +23,7 @@ WITH TMP_PGM AS (
              inner join GSBI_OWN.D_PRD_PRD_M P
                         on B.PRD_CD = P.PRD_CD
     WHERE A.BROAD_DT = :broad_dt
-      and A.CHANL_CD = :chanl_cd       --'H'
+      and A.CHANL_CD = :chanl_cd --'H'
       and A.MNFC_GBN_CD = :mnfc_gbn_cd -- '5'
 )
    , TMP_PRD AS (
@@ -33,9 +33,10 @@ WITH TMP_PGM AS (
          , I.ITEM_NM
          , I.ITEM_CD
          , B.ATTR_PRD_CD
-         , A.FST_BROAD_DT
          , SUBSTR(A.FST_BROAD_DT, 1, 4) AS FST_BROAD_YYYY
          , SUBSTR(A.FST_BROAD_DT, 5, 2) AS FST_BROAD_MM
+         , A.FST_BROAD_DT
+         , A.FST_PRD_SALE_PRC
          , B.ATTR_PRD_REP_CD
          , B.ATTR_PRD_WHL_VAL
          , B.ATTR_PRD_1_VAL
@@ -239,6 +240,8 @@ SELECT /*+ PARALLEL(4) */
                  INNER JOIN GSBI_OWN.D_BRD_BROAD_FORM_M X2 ON X1.PGM_ID = X2.PGM_ID
         WHERE X1.PRD_CD = TMP_PRD.PRD_CD) AS MYSHOP_FST_BROAD_DT
      , TMP_PRD.MD_ID
+     , TMP_PRD.FST_BROAD_DT
+     , TMP_PRD.FST_PRD_SALE_PRC
 FROM TMP_PRD
          INNER JOIN TMP_PRD_ATTR_INFO
                     ON TMP_PRD.PRD_CD = TMP_PRD_ATTR_INFO.PRD_CD
