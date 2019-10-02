@@ -45,7 +45,7 @@ COL_NAME_EN_TO_KR = {'ITEM_NM': '아이템명', 'ITEM_CD': '아이템코드',
                      'WEIHT_MI': '가중분', 'EXPCT_SAL_AMT_PER_WMI': '가중분취',
                      'ATTR_PRD_WHL_VAL': '상품속성값', 'MYSHOP_FST_BROAD_DT': '데이터런칭일자',
                      'SIZE2': '사이즈2', 'SIZE3': '사이즈3', 'MD_ID': 'MDID',
-                     'FST_BROAD_DT': '라이브런칭일', 'FST_PRD_SALE_PRC': '최초판매가'
+                     'FST_BROAD_DT': '라이브런칭일자', 'FST_PRD_SALE_PRC': '최초판매가'
                      }
 
 VIEW_DTYPES = {'ATTR_PRD_1_VAL': 'object', 'ATTR_PRD_2_VAL': 'object',
