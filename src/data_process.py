@@ -48,29 +48,29 @@ COL_NAME_EN_TO_KR = {'ITEM_NM': '아이템명', 'ITEM_CD': '아이템코드',
                      'FST_BROAD_DT': '라이브런칭일자', 'FST_PRD_SALE_PRC': '최초판매가'
                      }
 
-VIEW_DTYPES = {'ATTR_PRD_1_VAL': 'object', 'ATTR_PRD_2_VAL': 'object',
-               'ATTR_PRD_2_VAL_ORG': 'object', 'ATTR_PRD_CD': 'int',
-               'ATTR_PRD_WHL_VAL': 'object', 'BROAD_DT': 'object',
+VIEW_DTYPES = {'ATTR_PRD_1_VAL': str, 'ATTR_PRD_2_VAL': str,
+               'ATTR_PRD_2_VAL_ORG': str, 'ATTR_PRD_CD': int,
+               'ATTR_PRD_WHL_VAL': str, 'BROAD_DT': str,
                'BROAD_SEQ': 'float64', 'BROAD_STR_DTM': 'datetime64[ns]',
-               'CHANL_CD': 'object', 'CHG_RT': 'float64',
+               'CHANL_CD': str, 'CHG_RT': 'float64',
                'COLOR_CNT': 'float64', 'ESTIM_QTY': 'float64',
                'EXPCT_SAL_AMT_PER_WMI': 'float64', 'EXPOS_MI': 'float64',
                'FST_BROAD_MM': 'float64', 'FST_BROAD_YYYY': 'float64',
-               'ITEM_CD': 'float64', 'ITEM_NM': 'object',
+               'ITEM_CD': 'float64', 'ITEM_NM': str,
                'MYSHOP_FST_BROAD_DT': 'float64', 'NET_ORD_AMT': 'float64',
-               'PGM_ID': 'int', 'PGM_NM': 'object',
-               'PGM_TIME': 'object', 'PORD_03_TOT_ORD_QTY': 'float64',
-               'PRD_CD': 'int', 'PRD_NM': 'object',
-               'SIZE2': 'object', 'SIZE3': 'object',
-               'SIZE_STR': 'object', 'SOLD_OUT_DTM': 'datetime64[ns]',
+               'PGM_ID': int, 'PGM_NM': str,
+               'PGM_TIME': str, 'PORD_03_TOT_ORD_QTY': 'float64',
+               'PRD_CD': int, 'PRD_NM': str,
+               'SIZE2': str, 'SIZE3': str,
+               'SIZE_STR': str, 'SOLD_OUT_DTM': 'datetime64[ns]',
                'SOLD_OUT_FLAG': 'float64', 'SUPLY_APNT_QTY': 'float64',
                'TOT_ORD_AMT': 'float64', 'TOT_ORD_QTY': 'float64',
-               'VALUE': 'float64', 'WEIHT_MI': 'float64', 'MD_ID': 'object',
-               'FST_BROAD_DT': 'object', 'FST_PRD_SALE_PRC': 'float64'
+               'VALUE': 'float64', 'WEIHT_MI': 'float64', 'MD_ID': str,
+               'FST_BROAD_DT': 'float64', 'FST_PRD_SALE_PRC': 'float64'
                }
 
-SVD_DTYPES = {'PGM_ID': 'int', 'PRD_CD': 'int', 'CHANL_CD': 'object', 'ATTR_PRD_CD': 'int',
-              'ORD_DT': 'object', 'ORD_TIME': 'object', 'TOT_ORD_QTY': 'int64'}
+SVD_DTYPES = {'PGM_ID': int, 'PRD_CD': int, 'CHANL_CD': str, 'ATTR_PRD_CD': int,
+              'ORD_DT': str, 'ORD_TIME': str, 'TOT_ORD_QTY': int}
 
 COLUMNS = list(VIEW_DTYPES.keys())
 
