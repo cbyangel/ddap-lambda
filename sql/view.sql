@@ -5,7 +5,6 @@ WITH TMP_PGM AS (
          , A.BROAD_STR_DTM
          , A.BROAD_DT
          , A.PGM_NM
-         , A.MNFC_GBN_CD
          , C.BROAD_SEQ
     FROM GSBI_OWN.D_BRD_BROAD_FORM_M A
              INNER JOIN GSBI_OWN.D_BRD_BROAD_FORM_PRD_M B
@@ -24,7 +23,6 @@ WITH TMP_PGM AS (
                         on B.PRD_CD = P.PRD_CD
     WHERE A.BROAD_DT = :broad_dt
       and A.CHANL_CD = :chanl_cd --'H'
-      and A.MNFC_GBN_CD = :mnfc_gbn_cd -- '5'
 )
    , TMP_PRD AS (
     SELECT A.PRD_CD

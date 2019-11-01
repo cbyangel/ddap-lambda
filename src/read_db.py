@@ -9,14 +9,14 @@ ROOT_DIR = _os.getenv('PROJECT_HOME')
 
 def get_svd(conn, broad_dt, is_catv):
     if is_catv:
-        chanl_cd, mnfc_gbn_cd = 'C', '1'
+        chanl_cd = 'C'
     else:
-        chanl_cd, mnfc_gbn_cd = 'H', '5'
+        chanl_cd = 'H'
 
     with open(_os.path.join(ROOT_DIR, 'sql', 'svd.sql'), 'r') as f:
         sql = f.read()
 
-    params = {'broad_dt': broad_dt, 'chanl_cd': chanl_cd, 'mnfc_gbn_cd': mnfc_gbn_cd}
+    params = {'broad_dt': broad_dt, 'chanl_cd': chanl_cd}
     svd_data = _pd.read_sql(sql, conn, params=params)
     return svd_data
 
@@ -31,13 +31,13 @@ def get_view(conn, broad_dt, is_catv):
     """
 
     if is_catv:
-        chanl_cd, mnfc_gbn_cd = 'C', '1'
+        chanl_cd = 'C'
     else:
-        chanl_cd, mnfc_gbn_cd = 'H', '5'
+        chanl_cd = 'H'
 
     with open(_os.path.join(ROOT_DIR, 'sql', 'view.sql'), 'r') as f:
         sql = f.read()
 
-    params = {'broad_dt': broad_dt, 'chanl_cd': chanl_cd, 'mnfc_gbn_cd': mnfc_gbn_cd}
+    params = {'broad_dt': broad_dt, 'chanl_cd': chanl_cd}
     view_base = _pd.read_sql(sql, conn, params=params)
     return view_base

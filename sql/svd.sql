@@ -12,7 +12,6 @@ WITH PGM AS
              WHERE A.PGM_ID = B.PGM_ID
                AND A.BROAD_DT = :broad_dt
                AND A.CHANL_CD = :chanl_cd       -- 'C' --'H'
-               AND A.MNFC_GBN_CD = :mnfc_gbn_cd -- '1' -- '5'
          )
 
 SELECT /*+ FULL(ORD) PARALLEL(ORD, 4) */
