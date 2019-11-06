@@ -46,7 +46,7 @@ WITH TMP_PGM AS (
     FROM GSBI_OWN.D_PRD_PRD_M A
              INNER JOIN GSBI_OWN.D_PRD_ATTR_PRD_M B
                         ON A.PRD_CD = B.PRD_CD
-             inner join GSBI_OWN.D_PRD_ITEM_M I
+             INNER JOIN GSBI_OWN.D_PRD_ITEM_M I
                         on A.ITEM_CD = I.ITEM_CD
              INNER JOIN (SELECT DISTINCT PRD_CD FROM TMP_PGM) C
                         ON A.PRD_CD = C.PRD_CD
@@ -241,10 +241,10 @@ SELECT /*+ PARALLEL(4) */
      , TMP_PRD.FST_BROAD_DT
      , TMP_PRD.FST_PRD_SALE_PRC
 FROM TMP_PRD
-         INNER JOIN TMP_PRD_ATTR_INFO
-                    ON TMP_PRD.PRD_CD = TMP_PRD_ATTR_INFO.PRD_CD
          INNER JOIN TMP_PGM
                     ON TMP_PRD.PRD_CD = TMP_PGM.PRD_CD
+         LEFT OUTER JOIN TMP_PRD_ATTR_INFO
+                ON TMP_PRD.PRD_CD = TMP_PRD_ATTR_INFO.PRD_CD
          left outer join TMP_MINUTE
                          ON TMP_PGM.PRD_CD = TMP_MINUTE.PRD_CD
                              AND TMP_PGM.PGM_ID = TMP_MINUTE.PGM_ID

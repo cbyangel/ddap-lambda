@@ -56,11 +56,11 @@ def main(broad_dt):
             order_with_na = data_process.make_na_when_sold_out(view_part, order_, is_catv)
             svd_imputed = data_process.svd_impute(order_with_na)
             assert svd_imputed.shape[0] == order_.shape[0], 'svd_impute has wrong dimension'
+            if view_part.shape[0] != svd_imputed.shape[0]:
+                continue
 
             data_process.add_estim_qty(view_part, svd_imputed)
-            assert view_part.shape[0] == svd_imputed.shape[0]
             data_process.add_sold_out_dtm(view_part, order_with_na)
-
             sold_out_snapshot = data_process.get_snapshot_each_sold_out(view_part, order_with_na)
             data_process.add_first_sold_out_snapshot(view_part, sold_out_snapshot)
             data_process.add_pgm_time_string(view_part)
@@ -69,7 +69,7 @@ def main(broad_dt):
             view_part = data_process.column_translate(view_part)
 
             sold_out_snapshot = sold_out_snapshot.assign(PGM_ID=pgm_id, BROAD_DT=broad_dt)
-            assert sold_out_snapshot.stack().isna().sum() == 0, 'snapshot has unexpected null'
+            assert sold_out_snapshot.stack().isna().sum() == 0, ('snapshot has unexpected null', sold_out_snapshot)
             view_ = view_.append(view_part)
             sold_out_snapshot_ = sold_out_snapshot_.append(sold_out_snapshot)
 
@@ -82,7 +82,7 @@ def main(broad_dt):
 
 
 if __name__ == '__main__':
-    broad_dt = 20190128
+    broad_dt = 20160808
     write_db.delete_by_day_auto_table(broad_dt)
     write_db.delete_by_day_snapshot_table(broad_dt)
     main(broad_dt)

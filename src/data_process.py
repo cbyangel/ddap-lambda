@@ -7,7 +7,7 @@ from surprise import Reader
 from surprise.prediction_algorithms.matrix_factorization import SVD
 from surprise.model_selection import GridSearchCV
 
-import pandas as _pd
+import pandas as pd
 
 SEED = 23094
 N_CORE = 1
@@ -96,7 +96,7 @@ def split_svd_format(filtered_svd_data):
         if each_df.empty:
             continue
 
-        each_df = each_df.assign(**{TIME_KEY: each_df['ORD_DT'].str.cat(each_df['ORD_TIME']).apply(_pd.to_datetime)})
+        each_df = each_df.assign(**{TIME_KEY: each_df['ORD_DT'].str.cat(each_df['ORD_TIME']).apply(pd.to_datetime)})
 
         order_matrix = (each_df
                         .loc[:, SVD_KEYS]
@@ -125,7 +125,7 @@ def make_na_when_sold_out(view_part, order_, is_catv):
         supply_missing_order = order_.loc[order_.index.difference(supply_attr_cd)]
         supply_given_order = order_.loc[order_.index.intersection(supply_attr_cd)]
         supply_given_order_ = find_sold_out(supply_given_order, view_part, is_catv)
-        bind_both = _pd.concat([supply_missing_order, supply_given_order_], axis=0).sort_index()
+        bind_both = pd.concat([supply_missing_order, supply_given_order_], axis=0).sort_index()
         return bind_both
 
 
@@ -137,7 +137,7 @@ def add_estim_qty(view_part, svd_imputed):
 
 def prepare_columns(view):
     add_this_col = [i for i in COLUMNS if i not in view.columns.tolist()]
-    return _pd.concat([view, _pd.DataFrame(columns=add_this_col)], sort=False)
+    return pd.concat([view, pd.DataFrame(columns=add_this_col)], sort=False)
 
 
 def find_sold_out(order_, view_part, is_catv):
@@ -154,7 +154,7 @@ def find_sold_out(order_, view_part, is_catv):
     supply = view_part[SUPPLY_AMT_KEY].loc[lambda x: x != 0]
     cum_order = order__.cumsum(axis=1).ffill(axis=1).fillna(value=0)
     total_sales = order__.sum(axis=1)
-    buffer = supply.multiply(.9).map(_pd.np.ceil)
+    buffer = supply.multiply(.9).map(pd.np.ceil)
 
     attributes = total_sales.index
     for attribute in attributes:
@@ -165,7 +165,7 @@ def find_sold_out(order_, view_part, is_catv):
                 sold_out_time = cum_order.loc[attribute, :].idxmin()
             else:
                 sold_out_time = order_before_sold_out.idxmax()
-            order__.loc[attribute, sold_out_time:] = _pd.np.nan
+            order__.loc[attribute, sold_out_time:] = pd.np.nan
 
         elif is_catv and attr_total_sales > attr_buffer:  # order > 0.9 supply인 경우 일시품절 구간
             """
@@ -191,7 +191,7 @@ def find_sold_out(order_, view_part, is_catv):
                 continue
             else:
                 sold_out_time = slope_zero_interval.idxmin()
-                order__.loc[attribute, sold_out_time:] = _pd.np.nan
+                order__.loc[attribute, sold_out_time:] = pd.np.nan
         else:  # no sold out, return itself no na
             pass
 
@@ -280,7 +280,7 @@ def svd_impute(order_with_na):
         predicted_value = _predict(each_blank)
         test_set.loc[predict_row_idx, ORD_AMT_KEY] = predicted_value
 
-    filled_sold_per_minute_long_shape = _pd.concat([train_set, test_set]).round(0)
+    filled_sold_per_minute_long_shape = pd.concat([train_set, test_set]).round(0)
     imputed = filled_sold_per_minute_long_shape.pivot(index=ATTR_KEY, columns=TIME_KEY, values=ORD_AMT_KEY)
 
     """merge all zeros"""
@@ -293,7 +293,7 @@ def svd_impute(order_with_na):
 def add_sold_out_dtm(view_part, order_with_na):
     dtms_when_soldout = order_with_na.apply(lambda x: x.loc[x.isna()].index.min(), 1)
     soldout_dtm = dtms_when_soldout.to_frame(name='SOLD_OUT_DTM')
-    soldout_dtm['SOLD_OUT_FLAG'] = _pd.np.select([soldout_dtm.isna(), soldout_dtm.notna()], [0, 1])
+    soldout_dtm['SOLD_OUT_FLAG'] = pd.np.select([soldout_dtm.isna(), soldout_dtm.notna()], [0, 1])
     return view_part.update(soldout_dtm)
 
 
@@ -317,7 +317,7 @@ def add_no_ordered_attr(order, view_part):
     attributes_in_order = order_with_na_.index.values
     attributes_in_view = view_part.index.values
 
-    not_in_order = ~ _pd.np.isin(attributes_in_view, attributes_in_order)
+    not_in_order = ~ pd.np.isin(attributes_in_view, attributes_in_order)
     add_this_attributes = attributes_in_view[not_in_order]
     for add in add_this_attributes:
         order_with_na_.loc[add, :] = 0
@@ -343,22 +343,26 @@ def add_pgm_time_string(view_part):
     return view_part
 
 
-def fill_blank_order(view_part: _pd.DataFrame):
+def fill_blank_order(view_part: pd.DataFrame):
     orders = ['TOT_ORD_QTY', 'PORD_03_TOT_ORD_QTY']
     view_part[orders] = view_part[orders].fillna(value=0)
     return view_part
 
 
-def add_attribute_detail(view_part: _pd.DataFrame):
+def add_attribute_detail(view_part: pd.DataFrame):
     attributes = view_part.ATTR_PRD_WHL_VAL.str.split(',', expand=True)
-    assert attributes.shape[1] == 4, 'attributes length not 4'
+    if attributes.shape[1] != 4:
+        paste_leftover = attributes.iloc[:, 3:].apply(lambda x: ' '.join(x[~pd.isnull(x)].values), axis=1)
+        attributes.loc[:, 3] = paste_leftover
+        attributes = attributes.loc[:, :3]
+        assert attributes.shape[1] == 4, 'attribute shape over 4'
     attributes = attributes.loc[:, [2, 3]].rename(columns={2: 'SIZE2', 3: 'SIZE3'})
     assert attributes.shape[1] == 2
     view_part.update(attributes)
     return view_part
 
 
-def column_translate(view_part: _pd.DataFrame):
+def column_translate(view_part: pd.DataFrame):
     if view_part.index.name in COLUMNS:
         view_part = view_part.reset_index(drop=False).copy()
     assert view_part.shape[1] == COL_NAME_EN_TO_KR.__len__(), 'column length not match with translator'
@@ -380,12 +384,12 @@ def get_snapshot_each_sold_out(view_part, order_with_na):
     cumulative_order = order_with_na.fillna(value=0).cumsum(axis=1)
     sold_out_dtm = view_part['SOLD_OUT_DTM']
     tmp_soldout_dtm = sold_out_dtm.fillna(value=cumulative_order.columns.max())
-    unique_sold_out_dtms = _pd.np.sort(tmp_soldout_dtm.unique())
+    unique_sold_out_dtms = pd.np.sort(tmp_soldout_dtm.unique())
 
-    stack = _pd.DataFrame()
+    stack = pd.DataFrame()
     for seq, dtm in enumerate(unique_sold_out_dtms):
         seq += 1
-        sold_out_snapshot = _pd.DataFrame()
+        sold_out_snapshot = pd.DataFrame()
         sold_out_snapshot['ATTR_PRD_CD'] = cumulative_order.index
         sold_out_snapshot['SOLDOUT_SEQ'] = seq
         sold_out_snapshot['VALUE'] = cumulative_order.loc[:, dtm].values
